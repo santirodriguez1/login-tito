@@ -22,14 +22,17 @@ Este proyecto es una aplicación web sencilla que permite a los usuarios registr
    - Garantiza que el nombre de usuario sea único.
    - Guarda los datos en `LocalStorage`.
 
-3. **Pantalla Placeholder (404):**
-
-   - Muestra un mensaje de error simulando una sección no disponible.
-   - Incluye un botón de "Logout" para volver al login.
+3. **App de Dados:**
+   - Muestra un mensaje de bienvenida personalizado con el nombre del usuario.
+   - Incluye un dado de 6 caras con una imagen inicial predeterminada mostrando la cara "1".
+   - Botón para "tirar" el dado, que genera un número aleatorio entre 1 y 6.
+   - Cambia dinámicamente la imagen del dado según el resultado.
+   - Muestra el acumulado de los resultados de los lanzamientos.
 
 4. **Dark Mode:**
    - Al hacer clic en el botón, el diseño de la página cambia entre temas claro y oscuro.
    - La preferencia del usuario se guarda en `localStorage` y persiste al recargar la página.
+
 
 ---
 
@@ -75,11 +78,33 @@ Este proyecto es una aplicación web sencilla que permite a los usuarios registr
 
 > ![Modo Oscuro](/img/capturas/screen-4.png)
 
+### App de Dados
+
+> ![Dados](/img/capturas/screen-5.png)
+
 ---
 
 ## Notas
 
 - **Persistencia del Dark Mode:** El estado del modo oscuro se guarda en `localStorage` para que se mantenga entre recargas.
+
+- **Resultados de los Dados:** Los resultados de los lanzamientos no se almacenan en LocalStorage, se reinician al recargar la página.
+
+---
+
+## Cambios Realizados
+
+- Se reemplazó la pantalla de error 404 por una App de Dados funcional.
+
+- Se agregó una pantalla de bienvenida personalizada con el nombre del usuario logueado.
+
+- Se implementó la funcionalidad de "tirar dado" que genera un número aleatorio entre 1 y 6.
+
+- La imagen del dado se actualiza dinámicamente según el resultado del lanzamiento.
+
+- Se muestra el acumulado de los resultados de los lanzamientos.
+
+- Se verificó que los resultados del dado no se almacenan en LocalStorage, sino que se reinician al recargar la página.
 
 ---
 

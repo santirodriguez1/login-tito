@@ -59,11 +59,20 @@
       </div>
     </div>
 
-    <!-- 404 Section -->
-    <div id="notFoundSection" style="display: none">
+    <!-- Dice Roller App Section -->
+    <div id="diceRollerAppSection" style="display: none">
       <div class="container d-flex justify-content-center align-items-center vh-100 text-center">
         <div class="card p-4 shadow" style="width: 22rem; flex-direction: column">
-          <h2 class="text-danger mb-3">404</h2>
+          <h2 id="welcomeMessage" class="mb-3">Bienvenido, Usuario!</h2>
+          <img
+            id="diceImage"
+            src="./img/dados/bx-dice-1.svg"
+            alt="Dado"
+            class="img-fluid mb-3 mx-auto"
+            style="width: 100px; height: 100px"
+          />
+          <button id="rollDiceButton" class="btn btn-primary mb-3">Tirar Dado</button>
+          <p id="diceTotal">Total acumulado: 0</p>
           <button id="logout" class="btn btn-warning w-50 mx-auto">Logout</button>
           <button id="darkModeToggle-404" class="darkmode-button btn">
             <i class="bi bi-moon"></i>

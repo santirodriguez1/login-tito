@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const loginSection = document.getElementById("loginSection");
   const registerSection = document.getElementById("registerSection");
-  const notFoundSection = document.getElementById("notFoundSection");
+  const diceRollerAppSection = document.getElementById("diceRollerAppSection");
 
   // Inicializar secciones
   const showSection = (section) => {
-    [loginSection, registerSection, notFoundSection].forEach((sec) => {
+    [loginSection, registerSection, diceRollerAppSection].forEach((sec) => {
       sec.style.display = sec === section ? "block" : "none";
     });
   };
@@ -15,18 +15,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const users = JSON.parse(localStorage.getItem("users")) || [];
   const currentUser = localStorage.getItem("currentUser");
 
+  const logoutUser = () => {
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("sessionExpiry");
+    alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
+    showSection(loginSection);
+  };
+
+  const checkSession = () => {
+    const sessionExpiry = localStorage.getItem("sessionExpiry");
+    if (sessionExpiry && Date.now() > parseInt(sessionExpiry, 10)) {
+      logoutUser();
+    }
+  };
+
   if (currentUser) {
-    showSection(notFoundSection);
+    checkSession();
+    showSection(diceRollerAppSection);
+    document.getElementById("welcomeMessage").textContent = `¡Bienvenido, ${currentUser}!`;
   }
 
   // Login
-  const loginForm = document.getElementById("loginForm");
-  const loginError = document.getElementById("loginError");
-
-  loginForm.addEventListener("submit", (e) => {
+  document.getElementById("loginForm").addEventListener("submit", (e) => {
     e.preventDefault();
-    loginError.style.display = "none";
-
     const username = document.getElementById("loginUsername").value.trim();
     const password = document.getElementById("loginPassword").value.trim();
 
@@ -34,39 +45,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (user) {
       localStorage.setItem("currentUser", username);
-      showSection(notFoundSection);
+      localStorage.setItem("sessionExpiry", Date.now() + 10 * 60 * 1000);
+      showSection(diceRollerAppSection);
+      document.getElementById("welcomeMessage").textContent = `¡Bienvenido, ${username}!`;
     } else {
-      loginError.textContent = "Usuario o contraseña incorrectos.";
-      loginError.style.display = "block";
+      document.getElementById("loginError").textContent = "Usuario o contraseña incorrectos.";
+      document.getElementById("loginError").style.display = "block";
     }
   });
 
-  // Ir a registro
-  document.getElementById("createAccount").addEventListener("click", () => {
-    showSection(registerSection);
-  });
-
   // Registro
-  const registerForm = document.getElementById("registerForm");
-  const registerError = document.getElementById("registerError");
-
-  registerForm.addEventListener("submit", (e) => {
+  document.getElementById("registerForm").addEventListener("submit", (e) => {
     e.preventDefault();
-    registerError.style.display = "none";
-
     const username = document.getElementById("registerUsername").value.trim();
     const password = document.getElementById("registerPassword").value.trim();
     const confirmPassword = document.getElementById("registerConfirmPassword").value.trim();
 
     if (!username || !password || password !== confirmPassword) {
-      registerError.textContent = "Verifica los datos ingresados.";
-      registerError.style.display = "block";
+      document.getElementById("registerError").textContent = "Verifica los datos ingresados.";
+      document.getElementById("registerError").style.display = "block";
       return;
     }
 
     if (users.some((u) => u.username === username)) {
-      registerError.textContent = "El usuario ya existe.";
-      registerError.style.display = "block";
+      document.getElementById("registerError").textContent = "El usuario ya existe.";
+      document.getElementById("registerError").style.display = "block";
       return;
     }
 
@@ -75,14 +78,33 @@ document.addEventListener("DOMContentLoaded", () => {
     showSection(loginSection);
   });
 
-  // Volver al login desde registro
-  document.getElementById("backToLogin").addEventListener("click", () => {
-    showSection(loginSection);
+  // Lanzar Dado
+  const rollDiceButton = document.getElementById("rollDiceButton");
+  const diceImage = document.getElementById("diceImage");
+  const diceTotalElement = document.getElementById("diceTotal");
+  let diceTotal = 0;
+
+  diceImage.src = "./img/dados/bx-dice-1.svg"; // Mostrar la cara 1 por defecto
+
+  rollDiceButton.addEventListener("click", () => {
+    const diceRoll = Math.floor(Math.random() * 6) + 1;
+    diceImage.src = `./img/dados/bx-dice-${diceRoll}.svg`;
+    diceTotal += diceRoll;
+    diceTotalElement.textContent = `Total acumulado: ${diceTotal}`;
   });
 
   // Logout
   document.getElementById("logout").addEventListener("click", () => {
-    localStorage.removeItem("currentUser");
+    logoutUser();
+  });
+
+  // Volver a Login
+  document.getElementById("backToLogin").addEventListener("click", () => {
     showSection(loginSection);
+  });
+
+  // Ir a Registro
+  document.getElementById("createAccount").addEventListener("click", () => {
+    showSection(registerSection);
   });
 });
